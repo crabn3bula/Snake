@@ -89,7 +89,7 @@ namespace Core
         private void ResetGame()
         {
             _snake.Spawn();
-            _food.Spawn();
+            _food.Spawn(_snake.OccupiedCells());
             _score.Reset();
             _isGameOver = false;
         }
@@ -108,7 +108,7 @@ namespace Core
             {
                 _snake.Grow();
                 _score.Increase();
-                _food.Spawn();
+                _food.Spawn(_snake.OccupiedCells());
             }
 
             // collisions with body

@@ -1,4 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Net.Http.Headers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Core.Entities
@@ -17,13 +22,18 @@ namespace Core.Entities
         {
             _texture = texture;
             _textureRect = new Rectangle(new Point(0), new Point(Settings.CellSize));
-            Spawn();
         }
 
-        public void Spawn()
+        public void Spawn(IEnumerable<int> occupiedCells)
         {
-            var xPos = Game.Random.Next(0, SnakeGame.ColsCount - 1);
-            var yPos = Game.Random.Next(0, SnakeGame.RowsCount - 1);
+            var availableCells = Enumerable
+                .Range(0, (SnakeGame.RowsCount * SnakeGame.ColsCount) - 1)
+                .Except(occupiedCells)
+                .ToArray();
+
+            var spawnCell = availableCells[Game.Random.Next(0, availableCells.Length - 1)];
+            var xPos = spawnCell % SnakeGame.ColsCount;
+            var yPos = spawnCell / SnakeGame.ColsCount;
             Position = new Vector2(xPos, yPos);
         }
 

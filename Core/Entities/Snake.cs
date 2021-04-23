@@ -93,5 +93,14 @@ namespace Core.Entities
             // draw body
             Body.ForEach(segment => spriteBatch.Draw(_texture, segment * Settings.CellSize, _textureRect, Color.Gray));
         }
+
+        public IEnumerable<int> OccupiedCells()
+        {
+            var coordinates = new List<Vector2> { Head };
+            coordinates.AddRange(Body);
+            return coordinates
+                .Select(segment => (int) (segment.Y * (SnakeGame.RowsCount - 1) + segment.X))
+                .OrderBy(x => x);
+        }
     }
 }
