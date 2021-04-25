@@ -1,6 +1,7 @@
 ﻿using System;
 using Core.Entities;
 using Core.Input;
+using Core.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -23,6 +24,8 @@ namespace Core
         private SpriteBatch _spriteBatch;
 
         private RenderTarget2D _drawBuffer;
+
+        private SceneManager _sceneManager;
 
         // assets
         private Texture2D _pixelTexture;
@@ -68,6 +71,7 @@ namespace Core
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _drawBuffer = new RenderTarget2D(GraphicsDevice, Settings.Width, Settings.Height);
+            _sceneManager = new SceneManager(Content, _spriteBatch);
 
             // textures
             _pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
@@ -171,6 +175,8 @@ namespace Core
 
         protected override void Update(GameTime gameTime)
         {
+            _sceneManager.HandleInput();
+            _sceneManager.Update(gameTime);
             HandleInput();
 
             // wait for updating simulation
@@ -192,6 +198,8 @@ namespace Core
             GraphicsDevice.SetRenderTarget(_drawBuffer);
             GraphicsDevice.Clear(Color.Black);
 
+            _sceneManager.Draw(gameTime);
+            
             _spriteBatch.Begin();
             _snake.Draw(_spriteBatch);
             _food.Draw(_spriteBatch);
