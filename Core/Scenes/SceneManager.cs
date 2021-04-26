@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using JetBrains.Annotations;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,38 +7,26 @@ namespace Core.Scenes
 {
     public class SceneManager
     {
-        private readonly ContentManager _content;
+        [NotNull] private readonly ContentManager _contentManager;
 
-        private readonly SpriteBatch _spriteBatch;
-            
-        private readonly List<IScene> _scenes;
-        
+        [NotNull] private readonly GraphicsDevice _graphicsDevice;
+
+        [NotNull] private readonly SpriteBatch _spriteBatch;
+
         private IScene _currentScene;
 
-        public SceneManager(ContentManager content, SpriteBatch spriteBatch)
+        public SceneManager([NotNull] ContentManager contentManager, [NotNull] GraphicsDevice graphicsDevice, [NotNull] SpriteBatch spriteBatch)
         {
-            _content = content;
+            _contentManager = contentManager;
+            _graphicsDevice = graphicsDevice;
             _spriteBatch = spriteBatch;
-            _scenes = new List<IScene>();
-        }
-
-        public void Add(IScene scene)
-        {
-            _scenes.Add(scene);
-            scene.OnCreate();
-        }
-
-        public void Remove(IScene scene)
-        {
-            scene.OnDestroy();
-            _scenes.Remove(scene);
         }
 
         public void Switch(IScene scene)
         {
             _currentScene?.OnDeactivate();
             _currentScene = scene;
-            _currentScene.OnActivate();
+            _currentScene.OnActivate(_contentManager, _graphicsDevice);
         }
 
         public void HandleInput()
@@ -59,7 +47,7 @@ namespace Core.Scenes
             }
             
             _spriteBatch.Begin();
-            _currentScene.Draw(gameTime);
+            _currentScene.Draw(_spriteBatch, gameTime);
             _spriteBatch.End();
         }
     }

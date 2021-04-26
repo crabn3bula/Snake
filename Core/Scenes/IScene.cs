@@ -1,21 +1,20 @@
-﻿using Microsoft.Xna.Framework;
+﻿using JetBrains.Annotations;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Core.Scenes
 {
     public interface IScene
     {
-        public virtual void OnCreate() {}
-        
-        public virtual void OnDestroy() {}
+        public void OnActivate([NotNull] ContentManager contentManager, [NotNull] GraphicsDevice graphicsDevice);
 
-        public virtual void OnActivate() {}
+        public void OnDeactivate();
 
-        public virtual void OnDeactivate() {}
-        
-        public virtual void OnInput() {}
-        
-        public virtual void Update(GameTime gameTime) {}
-        
-        public virtual void Draw(GameTime gameTime) {}
+        public void OnInput();
+
+        public void Update(GameTime gameTime);
+
+        public void Draw([NotNull] SpriteBatch spriteBatch, GameTime gameTime);
     }
 }

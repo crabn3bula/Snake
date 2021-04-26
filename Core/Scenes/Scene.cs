@@ -1,32 +1,37 @@
-﻿using Microsoft.Xna.Framework;
+﻿using JetBrains.Annotations;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Core.Scenes
 {
     public abstract class Scene : IScene
     {
-        private readonly SceneManager _sceneManager;
+        [NotNull] protected SceneManager SceneManager { get; }
 
-        private readonly ContentManager _contentManager;
-
-        protected Scene(SceneManager sceneManager, ContentManager contentManager)
+        protected Scene([NotNull] SceneManager sceneManager)
         {
-            _sceneManager = sceneManager;
-            _contentManager = contentManager;
+            SceneManager = sceneManager;
         }
 
-        public virtual void OnCreate() {}
-        
-        public virtual void OnDestroy() {}
+        public virtual void OnActivate(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        {
+        }
 
-        public virtual void OnActivate() {}
+        public virtual void OnDeactivate()
+        {
+        }
 
-        public virtual void OnDeactivate() {}
-        
-        public virtual void OnInput() {}
-        
-        public virtual void Update(GameTime gameTime) {}
-        
-        public virtual void Draw(GameTime gameTime) {}
+        public virtual void OnInput()
+        {
+        }
+
+        public virtual void Update(GameTime gameTime)
+        {
+        }
+
+        public virtual void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        {
+        }
     }
 }
